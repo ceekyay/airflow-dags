@@ -3,7 +3,7 @@ from builtins import range
 from airflow.models import DAG
 import airflow
 from airflow.operators.bash_operator import BashOperator
-from airflow.operators.ssh_operator import SSHOperator
+from airflow.contrib.operators.ssh_operator import SSHOperator
 
 args = {
     'owner': 'airflow',
