@@ -3,6 +3,7 @@ from builtins import range
 from airflow.models import DAG
 import airflow
 from airflow.operators.bash_operator import BashOperator
+from airflow.operators.ssh_operator import SSHOperator
 
 args = {
     'owner': 'airflow',
@@ -29,9 +30,10 @@ VirusCheck = BashOperator(
   dag=dag,
 )
 
-MoveToPrecurated = BashOperator(
+MoveToPrecurated = SSHOperator(
   task_id='MoveToPrecurated',
-  bash_command="echo {{ dag_run.conf['precurated_bucket'] }}",
+  ssh_conn_id='flywheel',
+  command="aws s3 cp s3://{{ dag_run.conf['quarantine_bucket'] }}/ s3://{{ dag_run.conf['precurated_bucket'] }}/ --recursive",
   dag=dag,
 )
 
