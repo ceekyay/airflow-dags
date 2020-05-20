@@ -20,7 +20,7 @@ dag = DAG(
 
 Ingestion = BashOperator(
   task_id='Ingestion',
-  bash_command="echo {{ dag_run.conf['ingestion_status'] }}",
+  bash_command="echo {{ dag_run.conf['ingestion_status'] }}; sleep 5m",
   dag=dag,
 )
 
