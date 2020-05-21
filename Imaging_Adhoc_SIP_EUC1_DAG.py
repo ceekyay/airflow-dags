@@ -12,7 +12,7 @@ args = {
 }
 
 dag = DAG(
-    dag_id='Imaging_Adhoc_SIP_Workflow',
+    dag_id='Imaging_Adhoc_SIP_Workflow_EUC1',
     default_args=args,
     schedule_interval=None,
     catchup=False,
