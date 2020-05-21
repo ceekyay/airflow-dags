@@ -20,7 +20,7 @@ dag = DAG(
 
 Ingestion = BashOperator(
   task_id='Ingestion',
-  bash_command="echo {{ dag_run.conf['ingestion_status'] }}; sleep 5m",
+  bash_command="echo {{ dag_run.conf['ingestion_status'] }}",
   dag=dag,
 )
 
@@ -32,14 +32,15 @@ VirusCheck = BashOperator(
 
 MoveToPrecurated = SSHOperator(
   task_id='MoveToPrecurated',
-  ssh_conn_id='flywheel',
+  ssh_conn_id='flywheel_euc1',
   command="aws s3 cp s3://{{ dag_run.conf['quarantine_bucket'] }}/ s3://{{ dag_run.conf['precurated_bucket'] }}/ --recursive",
   dag=dag,
 )
 
-FlywheelUpload = BashOperator(
+FlywheelUpload = SSHOperator(
   task_id='FlywheelUpload',
-  bash_command="echo {{ dag_run.conf['fw_group'] }} && echo {{ dag_run.conf['fw_project'] }} && echo {{ dag_run.conf['fw_template'] }}",
+  ssh_conn_id='flywheel_euc1',
+  command="fw ingest template {{ dag_run.conf['fw_template'] }} --group {{ dag_run.conf['fw_group'] }} --project {{ dag_run.conf['fw_project'] }} --cluster https://flywheel-eu-sbx.science.roche.com/ingest s3://{{ dag_run.conf['precurated_bucket'] }}/{{ dag_run.conf['precurated_bucket_key'] }} -f",
   dag=dag,
 )
 
