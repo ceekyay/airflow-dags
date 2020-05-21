@@ -40,7 +40,7 @@ MoveToPrecurated = SSHOperator(
 FlywheelUpload = SSHOperator(
   task_id='FlywheelUpload',
   ssh_conn_id='flywheel_euc1',
-  command="fw ingest template {{ dag_run.conf['fw_template'] }} --group {{ dag_run.conf['fw_group'] }} --project {{ dag_run.conf['fw_project'] }} --cluster https://flywheel-eu-sbx.science.roche.com/ingest s3://{{ dag_run.conf['precurated_bucket'] }}/{{ dag_run.conf['precurated_bucket_key'] }} -f",
+  command="fw ingest template s3://{{ dag_run.conf['precurated_bucket'] }}/{{ dag_run.conf['precurated_bucket_key'] }} --config-file {{ dag_run.conf['fw_template'] }} --group {{ dag_run.conf['fw_group'] }} --project {{ dag_run.conf['fw_project'] }} --cluster https://flywheel-eu-sbx.science.roche.com/ingest -f",
   dag=dag,
 )
 
